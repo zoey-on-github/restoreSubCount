@@ -11,5 +11,6 @@
       "matches": ["*://old.reddit.com/r/*"],
       "js": ["content_script.js"]
     }
-  ]
+  ],
+  "permissions:": ["tabs"]
 }
