@@ -1,10 +1,21 @@
-console.log(document.getElementsByClassName("hover redditname")[1]);
+const hover = document.getElementsByClassName("hover redditname")[1];
 console.log("test");
-subredditName = window.location.href;
+subredditName = window.location.href.split("/")[4];
 console.log(subredditName);
-fetch(subredditName + "about.json").then((response) => {
-  console.log(response);
-  response.json().then((data) => {
-    console.log(data);
+/*
+async function getSubCount() {
+  const response = fetch(subredditName + "about.json")
+  
+   console.log(data);
+    console.log(data.data.subscribers)
+    const subcount = data.data.subscribers;
   });
 });
+}
+  */
+console.log(subcount);
+//Element.insertAdjacentHTML("afterend",hover)
+const test = document.createElement("div");
+test.innerHTML="test"
+hover.append(test)
+
