@@ -2,20 +2,17 @@ const hover = document.getElementsByClassName("hover redditname")[1];
 console.log("test");
 subredditName = window.location.href.split("/")[4];
 console.log(subredditName);
-/*
-async function getSubCount() {
-  const response = fetch(subredditName + "about.json")
-  
-   console.log(data);
-    console.log(data.data.subscribers)
+fetch("https://old.reddit.com/r/" + subredditName + "/about.json").then((response) => {
+  console.log(response);
+  response.json().then((data) => {
+    console.log(data);
     const subcount = data.data.subscribers;
+    const test = document.createElement("div");
+    test.innerHTML = subcount + " subscribers";
+    hover.append(test)
   });
-});
-}
-  */
-console.log(subcount);
-//Element.insertAdjacentHTML("afterend",hover)
-const test = document.createElement("div");
-test.innerHTML="test"
-hover.append(test)
 
+  const test = document.createElement("div");
+  test.innerHTML = subcount;
+  hover.append(test)
+});
