@@ -1,26 +1,30 @@
 const hover = document.getElementsByClassName("hover redditname")[1];
-console.log("test");
-subredditName = window.location.href.split("/")[4];
-console.log(subredditName);
-fetch("https://old.reddit.com/r/" + subredditName + "/about.json").then(
-  (response) => {
-    console.log(response);
-    response.json().then((data) => {
-      console.log(data);
-      let formatter = Intl.NumberFormat("en", { notation: "compact" });
-      let hoverFormatter = Intl.NumberFormat();
-      const hoverSubcount = hoverFormatter.format(data.data.subscribers);
-      const formattedSubcount = formatter.format(data.data.subscribers);
-      const subcount = data.data.subscribers;
-      const test = document.createElement("div");
-      test.innerHTML = formattedSubcount + " subscribers";
-      test.setAttribute("title", hoverSubcount + " subscribers");
-      hover.append(test);
+const subredditName = window.location.pathname.split("/")[2];
+
+// www.reddit.com may serve either UI. Only fetch and render when the old Reddit
+// sidebar is present.
+if (hover && subredditName) {
+  fetch(`/r/${encodeURIComponent(subredditName)}/about.json`)
+    .then((response) => {
+      if (!response.ok) throw new Error("Failed to load subreddit information");
+      return response.json();
+    })
+    .then((data) => {
+      const subscribers = data?.data?.subscribers;
+      if (!Number.isSafeInteger(subscribers) || subscribers < 0) return;
+
+      const formatter = Intl.NumberFormat("en", { notation: "compact" });
+      const hoverFormatter = Intl.NumberFormat();
+      const subcount = document.createElement("div");
+
+      subcount.textContent = `${formatter.format(subscribers)} subscribers`;
+      subcount.setAttribute(
+        "title",
+        `${hoverFormatter.format(subscribers)} subscribers`,
+      );
+      hover.append(subcount);
+    })
+    .catch(() => {
+      // Leave the page unchanged when the API is unavailable.
     });
-    /*
-    const test = document.createElement("div");
-    test.innerHTML = subcount;
-    hover.append(test);
-    */
-  },
-);
+}
