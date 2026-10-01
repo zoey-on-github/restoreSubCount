@@ -1,8 +1,9 @@
 name: Publish Firefox add-on
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - "main"
   workflow_dispatch:
 
 jobs:
