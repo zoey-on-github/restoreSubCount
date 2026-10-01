@@ -1,0 +1,25 @@
+name: Publish Firefox add-on
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Package extension
+        run: zip -r extension.zip manifest.json content_script.js icons
+
+      - name: Publish to addons.mozilla.org
+        uses: wdzeng/firefox-addon@v1
+        with:
+          addon-guid: 9454e5c8aa2949c797e5cfeca488855d
+          xpi-path: extension.zip
+          self-hosted: false
+          jwt-issuer: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          jwt-secret: ${{ secrets.FIREFOX_JWT_SECRET }}
